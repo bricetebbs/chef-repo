@@ -1,0 +1,33 @@
+{
+  "name": "all",
+  "chef_type": "role",
+  "json_class": "Chef::Role",
+
+  "description": "This includes everything on one server.",
+
+
+   "default_attributes" :
+   {
+        "pip_loader" : {
+            "pip_packages" :  [
+                "mysql-python",
+                "PIL",
+                "django",
+                "south",
+                "pysam",
+                "django-celery"]
+        }
+   },
+
+  "run_list": [
+    "recipe[build-essential]",
+    "recipe[freetype]",
+    "recipe[python]",
+    "recipe[mysql::server]",
+    "recipe[subversion]",
+    "recipe[pip_loader]",
+    "recipe[gunicorn]",
+    "recipe[django_extensions]",
+    "recipe[create_database]"
+  ]
+}
