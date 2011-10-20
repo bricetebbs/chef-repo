@@ -1,0 +1,1 @@
+default[:nginx][:site_name] = "mysite"

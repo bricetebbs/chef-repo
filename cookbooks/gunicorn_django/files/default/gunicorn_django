@@ -1,0 +1,64 @@
+
+CONFIG_DIR="/home/vagrant/henez"
+APP_NAME="henez"
+PORT=9000
+WORKERS=1
+CONFIG_FILE="/home/vagrant/henez/config/gunicorn/gunicorn.conf"
+
+USER=vagrant
+
+GUNICORN_RUN="gunicorn_django"
+
+PID="$CONFIG_DIR/gunicorn_"$APP_NAME".pid"
+
+
+RETVAL=0
+
+. /lib/lsb/init-functions
+
+start()
+{
+    echo "Starting gunicorn for: $APP_NAME."
+  #  export PYTHONPATH=$CONFIG_DIR;
+    cd $CONFIG_DIR
+    echo `pwd`
+    $GUNICORN_RUN -p $PID -c $CONFIG_FILE -D settings.py -u $USER && echo "OK" || echo "failed";
+}
+
+stop()
+{
+    echo "Stopping  gunicorn for:  $APP_NAME"
+    kill -QUIT `cat $PID` && echo "OK" || echo "failed";
+}
+
+reload()
+{
+    echo "Reloading gunicorn for: $APP_NAME:"
+    if [ -f $PID ]
+    then kill -HUP `cat $PID` && echo "OK" || echo "failed";
+    fi
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        reload
+        ;;
+    reload)
+        reload
+        ;;
+    force-reload)
+        stop && start
+        ;;
+    status)
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|restart}"
+        RETVAL=1
+esac
+exit $RETVAL
