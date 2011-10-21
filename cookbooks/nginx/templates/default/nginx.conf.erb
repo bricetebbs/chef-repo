@@ -16,13 +16,12 @@ http {
     sendfile on;
 
     upstream app_server {
-        # server unix:/tmp/gunicorn.sock fail_timeout=0;
-        # For a TCP configuration:
+        # Talk to the actual django server here
         server 127.0.0.1:9000 fail_timeout=0;
     }
 
     server {
-        listen 0.0.0.0:8000 default;
+        listen <%= @listen_addr %> default;
         client_max_body_size 4G;
         server_name _;
 

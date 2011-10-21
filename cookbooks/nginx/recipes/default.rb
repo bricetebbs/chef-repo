@@ -10,11 +10,16 @@ service "nginx" do
 end
 
 
-cookbook_file "/etc/nginx/nginx.conf" do
-  source "nginx.conf"
-  mode 0640
+template"/etc/nginx/nginx.conf" do
+  source "nginx.conf.erb"
+   mode 0640
   owner "root"
   group "root"
   notifies :restart, resources(:service => "nginx")
-end
+  if node[:instance_role] == 'vagrant'
+    variables  ( :listen_addr => "0.0.0.0:8000")
+  else
+    variables  ( :listen_addr => "80")
+  end
 
+end
