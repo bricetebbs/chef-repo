@@ -12,11 +12,9 @@ template "/etc/init.d/gunicorn_django"do
 end
 
 
-
 service "gunicorn_django" do
   enabled true
   running true
-  supports :restart => true, :reload => true
+  supports :restart => true, :reload => true, :status=> true
   action [ :enable]
 end
-

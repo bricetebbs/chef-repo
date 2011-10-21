@@ -40,6 +40,11 @@ reload()
     fi
 }
 
+status()
+{
+    echo "No Status info"
+}
+
 case "$1" in
     start)
         start
@@ -57,6 +62,7 @@ case "$1" in
         stop && start
         ;;
     status)
+        status
         ;;
     *)
         echo $"Usage: $0 {start|stop|restart}"

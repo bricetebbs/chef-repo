@@ -17,9 +17,9 @@ template"/etc/nginx/nginx.conf" do
   group "root"
   notifies :restart, resources(:service => "nginx")
   if node[:instance_role] == 'vagrant'
-    variables  ( :listen_addr => "0.0.0.0:8000")
+    variables( :listen_addr => "0.0.0.0:8000")
   else
-    variables  ( :listen_addr => "80")
+    variables( :listen_addr => "80")
   end
 
 end
