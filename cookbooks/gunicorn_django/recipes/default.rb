@@ -4,20 +4,19 @@ python_pip 'gunicorn' do
 end
 
 
-cookbook_file "/etc/init.d/gunicorn_django" do
-  source "gunicorn_django"
-  mode 0755
+template "/etc/init.d/gunicorn_django"do
+  source "gunicorn_django.erb"
   owner "root"
   group "root"
- # notifies :restart, resources(:service => "gunicorn_django")
-  action :create
+  mode 0755
 end
+
 
 
 service "gunicorn_django" do
   enabled true
   running true
   supports :restart => true, :reload => true
-  action [:start, :enable]
+  action [ :enable]
 end
 

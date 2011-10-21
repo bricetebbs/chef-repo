@@ -1,16 +1,17 @@
 
-CONFIG_DIR="/home/vagrant/henez"
 APP_NAME="henez"
+
+
+CONFIG_DIR="/home/django/$APP_NAME"
 PORT=9000
 WORKERS=1
-CONFIG_FILE="/home/vagrant/henez/config/gunicorn/gunicorn.conf"
+CONFIG_FILE="/home/django/$APP_NAME/config/gunicorn/gunicorn.conf"
 
-USER=vagrant
+USER=django
 
 GUNICORN_RUN="gunicorn_django"
 
-PID="$CONFIG_DIR/gunicorn_"$APP_NAME".pid"
-
+PID="/tmp/gunicorn_"$APP_NAME".pid"
 
 RETVAL=0
 
@@ -19,7 +20,6 @@ RETVAL=0
 start()
 {
     echo "Starting gunicorn for: $APP_NAME."
-  #  export PYTHONPATH=$CONFIG_DIR;
     cd $CONFIG_DIR
     echo `pwd`
     $GUNICORN_RUN -p $PID -c $CONFIG_FILE -D settings.py -u $USER && echo "OK" || echo "failed";

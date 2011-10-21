@@ -1,22 +1,65 @@
-# Copyright (C) 2010 Arthur Furlan <afurlan@afurlan.org>
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# On Debian systems, you can find the full text of the license in
-# /usr/share/common-licenses/GPL-2
+
+# Filed out by chef!
+APP_NAME="<%= node['django_basics']['app_name'] %>"
 
 
-#
-# Configuration file for "gunicorn_django" initscript
-#
+CONFIG_DIR="/home/django/$APP_NAME"
+PORT=9000
+WORKERS=1
+CONFIG_FILE="/home/django/$APP_NAME/config/gunicorn/gunicorn.conf"
 
-# Project root directory (contains the manage.py file)
-ROOTDIR="/home/vagrant/henez"
+USER=django
 
-CONFIG_FILE="$ROOTDIR/config/gunicorn/gunicorn.conf"
-DAEMON_ARGS="-c $CONFIG_FILE"
-#DAEMON_PATH="/your/virtualenv/directory/gunicorn_django"
-#RUN_AS="www-data"
+GUNICORN_RUN="gunicorn_django"
+
+PID="/tmp/gunicorn_"$APP_NAME".pid"
+
+RETVAL=0
+
+. /lib/lsb/init-functions
+
+start()
+{
+    echo "Starting gunicorn for: $APP_NAME."
+    cd $CONFIG_DIR
+    echo `pwd`
+    $GUNICORN_RUN -p $PID -c $CONFIG_FILE -D settings.py -u $USER && echo "OK" || echo "failed";
+}
+
+stop()
+{
+    echo "Stopping  gunicorn for:  $APP_NAME"
+    kill -QUIT `cat $PID` && echo "OK" || echo "failed";
+}
+
+reload()
+{
+    echo "Reloading gunicorn for: $APP_NAME:"
+    if [ -f $PID ]
+    then kill -HUP `cat $PID` && echo "OK" || echo "failed";
+    fi
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        reload
+        ;;
+    reload)
+        reload
+        ;;
+    force-reload)
+        stop && start
+        ;;
+    status)
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|restart}"
+        RETVAL=1
+esac
+exit $RETVAL

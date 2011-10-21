@@ -6,7 +6,7 @@ service "nginx" do
   enabled true
   running true
   supports :status => true, :restart => true, :reload => true
-  action [:start, :enable]
+  action [:enable]
 end
 
 
@@ -18,11 +18,3 @@ cookbook_file "/etc/nginx/nginx.conf" do
   notifies :restart, resources(:service => "nginx")
 end
 
-
-cookbook_file "/etc/nginx/sites-enabled/#{node[:nginx][:site_name]}" do
-  source "#{node[:nginx][:site_name]}"
-  mode 0640
-  owner "root"
-  group "root"
-  notifies :restart, resources(:service => "nginx")
-end
