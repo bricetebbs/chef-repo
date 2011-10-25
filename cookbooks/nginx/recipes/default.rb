@@ -2,6 +2,10 @@ package "nginx" do
     :upgrade
 end
 
+package "redis-server" do
+    :install
+end
+
 service "nginx" do
   enabled true
   running true

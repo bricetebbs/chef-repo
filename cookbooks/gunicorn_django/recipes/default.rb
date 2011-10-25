@@ -15,6 +15,6 @@ end
 service "gunicorn_django" do
   enabled true
   running true
-  supports :restart => true, :reload => true, :status=> true
+  supports :restart => true, :reload => true
   action [ :enable]
 end
