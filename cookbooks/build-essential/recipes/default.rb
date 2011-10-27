@@ -43,3 +43,11 @@ end
 package "bison" do
   action :install
 end
+
+package "libxslt1-dev" do
+  action :install
+end
+
+package "libxml2" do
+  action :install
+end

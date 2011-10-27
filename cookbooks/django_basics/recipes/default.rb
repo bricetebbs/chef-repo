@@ -13,6 +13,11 @@ for pkg in node[:django_basics][:pip_packages]
   end
 end
 
+directory '/file_store/' do
+    mode 0777
+    action :create
+end
+
 package 'libshadow-ruby1.8' do
     action :install
     end
